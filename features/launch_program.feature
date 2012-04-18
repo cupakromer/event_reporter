@@ -5,7 +5,7 @@ Feature: program is launched
   Where I can issue one of several commands
 
   Scenario: program is run
-    Given I am have not launched the program
+    Given I have not launched the program
     When I run the program
     Then I should see "Welcome to Event Reporter!"
     And I should see the command prompt
