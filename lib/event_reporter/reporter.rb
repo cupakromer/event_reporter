@@ -16,6 +16,7 @@ module EventReporter
     def execute command
       if !known_commands.include? command
         output.puts "Sorry, I don't know that command"
+        output.puts "Use the command 'help' to see a list of all valid commands"
       end
       output.puts "Command: "
     end
