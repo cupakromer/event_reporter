@@ -5,6 +5,7 @@ module EventReporter
 
     def initialize data_file, output
       @output = output
+      @known_commands = ["help"]
     end
 
     def run
@@ -13,7 +14,13 @@ module EventReporter
     end
 
     def execute command
+      if !known_commands.include? command
+        output.puts "Sorry, I don't know that command"
+      end
       output.puts "Command: "
     end
+
+    private
+    attr_reader :known_commands
   end
 end

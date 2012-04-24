@@ -33,7 +33,12 @@ end
 ANY_COMMAND = "a_command"
 When /^I enter any command$/ do
   output.clear
-  @app.execute(ANY_COMMAND)
+  @app.execute ANY_COMMAND
+end
+
+INVALID_COMMAND = "not a real command!!"
+When /^I enter an invalid command$/ do
+  @app.execute INVALID_COMMAND
 end
 
 Then /^I should see "([^"]*)"$/ do |message|
