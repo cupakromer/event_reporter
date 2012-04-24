@@ -11,5 +11,9 @@ module EventReporter
       output.puts "Welcome to Event Reporter!"
       output.puts "Command: "
     end
+
+    def execute command
+      output.puts "Command: "
+    end
   end
 end

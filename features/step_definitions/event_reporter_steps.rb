@@ -6,6 +6,10 @@ class Output
   def puts(message)
     messages << message
   end
+
+  def clear
+    @messages = []
+  end
 end
 
 def output
@@ -16,14 +20,26 @@ Given /^I have not launched the program$/ do
   # Do nothing, we have no program to do anything with now.
 end
 
+Given /^I am at the command prompt$/ do
+  @app = EventReporter::Reporter.new("event_attendees.csv", output)
+  @app.run
+  output.messages.last.should include "Command: "
+end
+
 When /^I run the program$/ do
   EventReporter::Reporter.new("event_attendees.csv", output).run
+end
+
+ANY_COMMAND = "a_command"
+When /^I enter any command$/ do
+  output.clear
+  @app.execute(ANY_COMMAND)
 end
 
 Then /^I should see "([^"]*)"$/ do |message|
   output.messages.should include message
 end
 
-Then /^I should see the command prompt$/ do
+Then /^I should see the command prompt/ do
   output.messages.should include "Command: "
 end
