@@ -41,26 +41,50 @@ module EventReporter
         when 'clear'
           queue_clear
         else
-          output.puts "Sorry, I don't know that command"
-          output.puts "Use the command 'help' to see a list of all valid commands"
+          output_help_messages
         end
       else
-        output.puts "Sorry, I don't know that command"
-        output.puts "Use the command 'help' to see a list of all valid commands"
+        output_help_messages
       end
       output.puts "Command: "
     end
 
-    private
     attr_accessor :attendees
 
     def load_attendees_from filename
       file = CSV.open filename, headers: true, header_converters: :symbol
       @attendees = []
       file.each do |attendee|
-        @attendees << attendee
+        @attendees << clean_data(attendee)
       end
       output.puts "#{@attendees.size} attendees loaded"
+    end
+
+    def clean_data attendee_record
+      attendee_record[:homephone] = clean_number attendee_record[:homephone]
+    end
+
+    INVALID_PHONE_NUMBER_CHARACTERS = /\D/
+    VALID_PHONE_NUMBER_LENGTH = 10
+    INVALID_PHONE_NUMBER = "0000000000"
+    US_PHONE_CODE = "1"
+
+    def clean_number original
+      original ||= ""
+      original = original.gsub INVALID_PHONE_NUMBER_CHARACTERS, ''
+
+      if original.length == VALID_PHONE_NUMBER_LENGTH
+        original
+      elsif number_has_us_code? original
+        original[1..-1]
+      else
+        INVALID_PHONE_NUMBER
+      end
+    end
+
+    def number_has_us_code? number
+      number.length == (VALID_PHONE_NUMBER_LENGTH + 1) &&
+      number.start_with?(US_PHONE_CODE)
     end
 
     def output_help_messages
