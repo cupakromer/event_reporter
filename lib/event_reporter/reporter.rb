@@ -23,7 +23,9 @@ module EventReporter
       else
         case command
         when 'load'
-          @file = CSV.open args[0], headers: true, header_converters: :symbol
+          filename = args.empty? ? "event_attendees.csv" : args[0]
+          output.puts filename
+          @file = CSV.open filename, headers: true, header_converters: :symbol
           @attendees = []
           @file.each do |attendee|
             @attendees << attendee
