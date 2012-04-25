@@ -54,7 +54,7 @@ Then /^I should see the command prompt/ do
 end
 
 Then /^I should see a list of all available commands$/ do
-  @app.known_commands.keys.each do |command|
+  EventReporter::Reporter::KNOWN_COMMANDS.keys.each do |command|
     output.messages.should include command
   end
 end
