@@ -64,7 +64,7 @@ module EventReporter
       record[:homephone] = clean_phone_number record[:homephone]
     end
 
-    INVALID_PHONE_NUMBER_CHARACTERS = /\D/
+    INVALID_PHONE_NUMBER_CHARACTERS = INVALID_ZIPCODE_CHARACTERS = /\D/
     VALID_PHONE_NUMBER_LENGTH = 10
     INVALID_PHONE_NUMBER = "0000000000"
     US_PHONE_CODE = "1"
@@ -85,6 +85,25 @@ module EventReporter
     def number_has_us_code? number
       number.length == (VALID_PHONE_NUMBER_LENGTH + 1) &&
       number.start_with?(US_PHONE_CODE)
+    end
+
+    INVALID_ZIPCODE = "00000"
+    VALID_ZIPCODE_LENGTH = 5
+    ZIPCODE_PAD = "0"
+
+    def clean_zipcode original
+      original ||= INVALID_ZIPCODE
+      original = original.gsub INVALID_ZIPCODE_CHARACTERS, ''
+
+      if original.length < VALID_ZIPCODE_LENGTH
+        pad_zipcode original
+      else
+        original
+      end
+    end
+
+    def pad_zipcode original
+      ZIPCODE_PAD * (VALID_ZIPCODE_LENGTH - original.length) + original
     end
 
     def output_help_messages

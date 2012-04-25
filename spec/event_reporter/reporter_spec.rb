@@ -20,5 +20,24 @@ module EventReporter
         end
       end
     end
+
+    describe "#clean_zipcode" do
+      {
+        "12345" => "12345",
+        "1234"  => "01234",
+        "123"   => "00123",
+        "12"    => "00012",
+        "1"     => "00001",
+        nil     => "00000",
+        "abc"   => "00000",
+        "01.12" => "00112",
+      }.each do |zipcode, cleanded_zipcode|
+        it "converts #{zipcode} to #{cleanded_zipcode}" do
+          output = double('output')
+          reporter = Reporter.new output
+          reporter.clean_zipcode(zipcode).should == cleanded_zipcode
+        end
+      end
+    end
   end
 end
