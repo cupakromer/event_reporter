@@ -33,6 +33,15 @@ module EventReporter
         load_attendees_from filename
       when 'help'
         help args
+      when 'queue'
+        command, *args = *args
+        case command
+        when 'count'
+          output.puts "#{queue_count} attendees in queue"
+        else
+          output.puts "Sorry, I don't know that command"
+          output.puts "Use the command 'help' to see a list of all valid commands"
+        end
       else
         output.puts "Sorry, I don't know that command"
         output.puts "Use the command 'help' to see a list of all valid commands"
@@ -41,6 +50,8 @@ module EventReporter
     end
 
     private
+    attr_reader :attendees
+
     def load_attendees_from filename
       file = CSV.open filename, headers: true, header_converters: :symbol
       @attendees = []
@@ -58,6 +69,10 @@ module EventReporter
       else
         output.puts command_description args * " "
       end
+    end
+
+    def queue_count
+      attendees.size
     end
 
     def command_description command

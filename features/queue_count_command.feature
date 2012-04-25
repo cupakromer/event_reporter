@@ -7,6 +7,6 @@ Feature: Issuing the 'queue count' command will output the number of records
   Scenario: Queue Count
     Given the default attendees are loaded
     When I issue the command "queue count"
-    Then I should see "5157 attendees in queue"
+    Then I should see "5175 attendees in queue"
 
 
