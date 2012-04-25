@@ -60,8 +60,8 @@ module EventReporter
       output.puts "#{@attendees.size} attendees loaded"
     end
 
-    def clean_data attendee_record
-      attendee_record[:homephone] = clean_number attendee_record[:homephone]
+    def clean_data record
+      record[:homephone] = clean_phone_number record[:homephone]
     end
 
     INVALID_PHONE_NUMBER_CHARACTERS = /\D/
@@ -69,7 +69,7 @@ module EventReporter
     INVALID_PHONE_NUMBER = "0000000000"
     US_PHONE_CODE = "1"
 
-    def clean_number original
+    def clean_phone_number original
       original ||= ""
       original = original.gsub INVALID_PHONE_NUMBER_CHARACTERS, ''
 

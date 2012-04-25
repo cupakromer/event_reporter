@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module EventReporter
   describe Reporter do
-    describe "#clean_number" do
+    describe "#clean_phone_number" do
       {
         "1234567890"     => "1234567890",
         "(123) 456-7890" => "1234567890",
@@ -16,7 +16,7 @@ module EventReporter
         it "converts #{phone_number} to #{cleaned_number}" do
           output = double('output')
           reporter = Reporter.new output
-          reporter.clean_number(phone_number).should == cleaned_number
+          reporter.clean_phone_number(phone_number).should == cleaned_number
         end
       end
     end
