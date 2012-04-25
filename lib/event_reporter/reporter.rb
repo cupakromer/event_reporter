@@ -15,7 +15,7 @@ module EventReporter
       "find" => "Load the queue with all records matching the criteria for the given attribute."
     }
 
-    def initialize data_file, output
+    def initialize output
       @output = output
     end
 

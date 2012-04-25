@@ -5,8 +5,8 @@ Feature: Issuing the 'queue count' command will output the number of records
   I will run the 'queue count' command
 
   Scenario: Queue Count
-    Given I am at the command prompt with default data loaded
+    Given the default attendees are loaded
     When I issue the command "queue count"
-    Then I should see "10 attendees in queue"
+    Then I should see "5157 attendees in queue"
 
 

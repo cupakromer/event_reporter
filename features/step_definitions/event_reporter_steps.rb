@@ -16,18 +16,27 @@ def output
   @output ||= Output.new
 end
 
+DEFAULT_DATA_FILE = "event_attendees.csv"
+
 Given /^I have not launched the program$/ do
   # Do nothing, we have no program to do anything with now.
 end
 
 Given /^I am at the command prompt$/ do
-  @app = EventReporter::Reporter.new("event_attendees.csv", output)
+  @app = EventReporter::Reporter.new(output)
   @app.run
   output.messages.last.should include "Command: "
 end
 
+Given /^the default attendees are loaded$/ do
+  @app = EventReporter::Reporter.new(output)
+  @app.run
+  @app.execute "load #{DEFAULT_DATA_FILE}"
+  output.messages.last.should include "Command: "
+end
+
 When /^I run the program$/ do
-  EventReporter::Reporter.new("event_attendees.csv", output).run
+  @app = EventReporter::Reporter.new(output).run
 end
 
 ANY_COMMAND = "a_command"
