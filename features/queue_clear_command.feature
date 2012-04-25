@@ -8,4 +8,4 @@ Feature: Issuing the 'queue clear' command emptys attendee list
     Given the default attendees are loaded
     When I issue the command "queue clear"
     Then I should see "Attendee queue is empty"
-    And issuing "queue count" should return 0
+    And issuing "queue count" should return "0 attendees in queue"

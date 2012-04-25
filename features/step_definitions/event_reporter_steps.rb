@@ -72,3 +72,7 @@ Then /^I should see a list of all available commands$/ do
   end
 end
 
+Then /^issuing "([^"]*)" should return "([^"]*)"$/ do |command, expected_output|
+  @app.execute command
+  output.messages.should include expected_output
+end

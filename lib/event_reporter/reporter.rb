@@ -87,7 +87,7 @@ module EventReporter
     end
 
     def queue_clear
-      attendees = []
+      attendees.clear
       output.puts "Attendee queue is empty"
     end
 
