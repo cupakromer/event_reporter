@@ -30,13 +30,7 @@ module EventReporter
       case command
       when 'load'
         filename = args.empty? ? "event_attendees.csv" : args[0]
-        output.puts filename
-        file = CSV.open filename, headers: true, header_converters: :symbol
-        @attendees = []
-        file.each do |attendee|
-          @attendees << attendee
-        end
-        output.puts "#{@attendees.size} attendees loaded"
+        load_attendees_from filename
       when 'help'
         help args
       else
@@ -47,6 +41,15 @@ module EventReporter
     end
 
     private
+    def load_attendees_from filename
+      file = CSV.open filename, headers: true, header_converters: :symbol
+      @attendees = []
+      file.each do |attendee|
+        @attendees << attendee
+      end
+      output.puts "#{@attendees.size} attendees loaded"
+    end
+
     def help args
       if args.empty?
         KNOWN_COMMANDS.keys.each do |command|
@@ -60,7 +63,6 @@ module EventReporter
     def command_description command
       KNOWN_COMMANDS[command]
     end
-
   end
 
 end
