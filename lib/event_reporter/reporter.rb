@@ -38,6 +38,8 @@ module EventReporter
         case command
         when 'count'
           output.puts "#{queue_count} attendees in queue"
+        when 'clear'
+          queue_clear
         else
           output.puts "Sorry, I don't know that command"
           output.puts "Use the command 'help' to see a list of all valid commands"
@@ -50,7 +52,7 @@ module EventReporter
     end
 
     private
-    attr_reader :attendees
+    attr_accessor :attendees
 
     def load_attendees_from filename
       file = CSV.open filename, headers: true, header_converters: :symbol
@@ -82,6 +84,11 @@ module EventReporter
 
     def queue_count
       attendees.size
+    end
+
+    def queue_clear
+      attendees = []
+      output.puts "Attendee queue is empty"
     end
 
     def command_description command
