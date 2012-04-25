@@ -8,9 +8,9 @@ Feature: Issuing the 'load' command will load CSV data
   Scenario: Load a specified data file
     Given I am at the command prompt
     When I issue the command "load my_attendees.csv"
-    Then I should see a message "10 attendees loaded"
+    Then I should see "10 attendees loaded"
 
   Scenario: Load the default data file
     Given I am at the command prompt
     When I issue the command "load"
-    Then I should see a message "5175 attendees loaded"
+    Then I should see "5175 attendees loaded"
