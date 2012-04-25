@@ -15,8 +15,8 @@ Feature: Issuing the 'help' command will provide information
     Then I should see "<description>"
 
     Scenarios: load command
-      | command | description |
-      | load    | test |
+       | command | description                                                                                                  |
+       | load    | Erase any loaded data and parse the specified file. If no filename is given, default to event_attendees.csv. |
 
     Scenarios: queue commands
       | command        | description                                                  |
