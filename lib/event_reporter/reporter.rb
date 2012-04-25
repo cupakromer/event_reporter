@@ -61,13 +61,22 @@ module EventReporter
       output.puts "#{@attendees.size} attendees loaded"
     end
 
+    def output_help_messages
+      output.puts "Sorry, I don't know that command"
+      output.puts "Use the command 'help' to see a list of all valid commands"
+    end
+
     def help args
-      if args.empty?
+      command = args * " "
+
+      if command.empty?
         KNOWN_COMMANDS.keys.each do |command|
           output.puts command
         end
-      else
+      elsif KNOWN_COMMANDS.include? command
         output.puts command_description args * " "
+      else
+        output_help_messages
       end
     end
 

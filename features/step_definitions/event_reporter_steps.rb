@@ -54,6 +54,10 @@ When /^I issue the command "([^"]*)"$/ do |command|
   @app.execute command
 end
 
+When /^I issue the "([^"]*)" command for an invalid command$/ do |command|
+  @app.execute "#{command} #{INVALID_COMMAND}"
+end
+
 Then /^I should see "([^"]*)"$/ do |message|
   output.messages.should include message
 end

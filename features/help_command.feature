@@ -29,3 +29,9 @@ Feature: Issuing the 'help' command will provide information
     Scenarios: find command
        | command | description                                                                    |
        | find    | Load the queue with all records matching the criteria for the given attribute. |
+
+  Scenario: Request help on invalid command
+    Given I am at the command prompt
+    When I issue the "help" command for an invalid command
+    Then I should see "Sorry, I don't know that command"
+    And I should see "Use the command 'help' to see a list of all valid commands"
