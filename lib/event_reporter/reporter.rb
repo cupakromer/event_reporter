@@ -26,29 +26,27 @@ module EventReporter
     def execute command
       command, *args = command.chomp.split
 
-      if !known_commands.keys.include? command
+      case command
+      when 'load'
+        filename = args.empty? ? "event_attendees.csv" : args[0]
+        output.puts filename
+        @file = CSV.open filename, headers: true, header_converters: :symbol
+        @attendees = []
+        @file.each do |attendee|
+          @attendees << attendee
+        end
+        output.puts "#{@attendees.size} attendees loaded"
+      when 'help'
+        if args.empty?
+          known_commands.keys.each do |command|
+            output.puts command
+          end
+        else
+          output.puts known_commands[args * " "]
+        end
+      else
         output.puts "Sorry, I don't know that command"
         output.puts "Use the command 'help' to see a list of all valid commands"
-      else
-        case command
-        when 'load'
-          filename = args.empty? ? "event_attendees.csv" : args[0]
-          output.puts filename
-          @file = CSV.open filename, headers: true, header_converters: :symbol
-          @attendees = []
-          @file.each do |attendee|
-            @attendees << attendee
-          end
-          output.puts "#{@attendees.size} attendees loaded"
-        when 'help'
-          if args.empty?
-            known_commands.keys.each do |command|
-              output.puts command
-            end
-          else
-            output.puts known_commands[args * " "]
-          end
-        end
       end
       output.puts "Command: "
     end
