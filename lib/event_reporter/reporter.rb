@@ -2,7 +2,7 @@ require 'csv'
 
 module EventReporter
   class Reporter
-    attr_reader :output
+    attr_reader :output, :known_commands
 
     def initialize data_file, output
       @output = output
@@ -31,12 +31,13 @@ module EventReporter
             @attendees << attendee
           end
           output.puts "#{@attendees.size} attendees loaded"
+        when 'help'
+          known_commands.each do |command|
+            output.puts command
+          end
         end
       end
       output.puts "Command: "
     end
-
-    private
-    attr_reader :known_commands
   end
 end

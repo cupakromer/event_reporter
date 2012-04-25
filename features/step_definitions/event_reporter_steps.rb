@@ -52,3 +52,10 @@ end
 Then /^I should see the command prompt/ do
   output.messages.should include "Command: "
 end
+
+Then /^I should see a list of all available commands$/ do
+  @app.known_commands.each do |command|
+    output.messages.should include command
+  end
+end
+
