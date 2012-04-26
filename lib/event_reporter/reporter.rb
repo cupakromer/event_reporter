@@ -62,6 +62,12 @@ module EventReporter
 
     def clean_data record
       record[:homephone] = clean_phone_number record[:homephone]
+      record[:zipcode] = clean_zipcode record[:zipcode]
+      record[:first_name].capitalize! if record[:first_name]
+      record[:last_name].capitalize! if record[:last_name]
+      record[:email].downcase! if record[:email]
+
+      record
     end
 
     INVALID_PHONE_NUMBER_CHARACTERS = INVALID_ZIPCODE_CHARACTERS = /\D/

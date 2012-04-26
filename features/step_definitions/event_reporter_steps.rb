@@ -84,10 +84,11 @@ Then /^issuing "([^"]*)" should return "([^"]*)"$/ do |command, expected_output|
   output.messages.should include expected_output
 end
 
+ATTENDEE_DATA_TABLE_HEADER = "LAST NAME\tFIRST NAME\tEMAIL\tZIPCODE\tCITY\tSTATE\tADDRESS\tPHONE"
+
 Then /^I should see the data table:$/ do |expected_table|
-  STDOUT.puts expected_table.column_names * "\t"
+  output.messages.should include ATTENDEE_DATA_TABLE_HEADER
   expected_table.rows.each do |row|
-    STDOUT.puts row * "\t"
+    output.messages.should include row * "\t"
   end
-  #expected_table.diff! @table
 end
