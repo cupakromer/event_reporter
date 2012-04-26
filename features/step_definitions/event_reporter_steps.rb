@@ -84,10 +84,8 @@ Then /^issuing "([^"]*)" should return "([^"]*)"$/ do |command, expected_output|
   output.messages.should include expected_output
 end
 
-ATTENDEE_DATA_TABLE_HEADER = "LAST NAME\tFIRST NAME\tEMAIL\tZIPCODE\tCITY\tSTATE\tADDRESS\tPHONE"
-
 Then /^I should see the data table:$/ do |expected_table|
-  output.messages.should include ATTENDEE_DATA_TABLE_HEADER
+  output.messages.should include EventReporter::Reporter::DATA_TABLE_HEADER
   expected_table.rows.each do |row|
     output.messages.should include row * "\t"
   end

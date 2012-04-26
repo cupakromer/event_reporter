@@ -40,6 +40,8 @@ module EventReporter
           output.puts "#{queue_count} attendees in queue"
         when 'clear'
           queue_clear
+        when 'print'
+          print_attendees
         else
           output_help_messages
         end
@@ -63,9 +65,13 @@ module EventReporter
     def clean_data record
       record[:homephone] = clean_phone_number record[:homephone]
       record[:zipcode] = clean_zipcode record[:zipcode]
-      record[:first_name].capitalize! if record[:first_name]
-      record[:last_name].capitalize! if record[:last_name]
       record[:email].downcase! if record[:email]
+
+      [ :first_name, :last_name ].each do |sym|
+        if record[sym]
+          record[sym] = record[sym].split.map!{|w| w.capitalize}.join(" ")
+        end
+      end
 
       record
     end
@@ -138,6 +144,18 @@ module EventReporter
     def queue_clear
       attendees.clear
       output.puts "Attendee queue is empty"
+    end
+
+    DATA_TABLE_HEADER =
+      "LAST NAME\tFIRST NAME\tEMAIL\tZIPCODE\tCITY\tSTATE\tADDRESS\tPHONE"
+
+    def print_attendees
+      output.puts DATA_TABLE_HEADER
+      attendees.each do |a|
+        output.puts "#{a[:last_name]}\t#{a[:first_name]}\t" \
+                    "#{a[:email_address]}\t#{a[:zipcode]}\t#{a[:city]}\t" \
+                    "#{a[:state]}\t#{a[:street]}\t#{a[:homephone]}"
+      end
     end
 
     def command_description command
