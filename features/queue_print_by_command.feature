@@ -8,7 +8,7 @@ Feature: Issuing the 'queue print by' command will output a sorted data table
   Scenario: Sorted Tab Delimited Table
     Given the "my_attendees.csv" attendees are loaded
     When I issue the command "queue print by last_name"
-    Then I should see the sorted data table:
+    Then I should see the ordered data table:
        | LAST NAME | FIRST NAME | EMAIL                             | ZIPCODE | CITY             | STATE | ADDRESS                | PHONE          |
        | Armideo   | Shiyu      | odfarg06@jumpstartlab.com         | 96734   | Kailua           | HI    | 644 Ikemaka PL         | 8084974000     |
        | Cope      | Jennifer   | bjgielskil@jumpstartlab.com       | 00000   | Nashville        | TN    | 1133 Shelton Ave       | 7048133000   |

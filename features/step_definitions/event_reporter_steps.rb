@@ -90,3 +90,10 @@ Then /^I should see the data table:$/ do |expected_table|
     output.messages.should include row * "\t"
   end
 end
+
+Then /^I should see the ordered data table:$/ do |expected_table|
+  output_text = output.messages
+  output_text.should include Event::Reporter::DATA_TABLE_HEADER
+  start = output.messages.rindex[Event::Reporter::DATA_TABLE_HEADER] + 1
+  output_text[start..(expected_table.size - 1)].should be expected_table[1..-1]
+end
