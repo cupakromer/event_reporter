@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'event/data_cleaner'
 
 module Event
   describe DataCleaner do
