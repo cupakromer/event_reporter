@@ -1,6 +1,7 @@
 module Event
   module DataCleaner
     INVALID_PHONE_NUMBER_CHARS = INVALID_ZIPCODE_CHARS = /\D/
+
     VALID_PHONE_NUMBER_LENGTH = 10
     INVALID_PHONE_NUMBER = "0000000000"
     US_PHONE_CODE = "1"
@@ -9,8 +10,8 @@ module Event
     VALID_ZIPCODE_LENGTH = 5
     ZIPCODE_PAD = "0"
 
-    def self.clean_phone_number original
-      numbers = scrub_invalid_chars original, INVALID_PHONE_NUMBER_CHARS, ""
+    def self.clean_phone_number dirty
+      numbers = scrub_invalid_chars dirty, INVALID_PHONE_NUMBER_CHARS, ""
 
       if numbers.length == VALID_PHONE_NUMBER_LENGTH
         numbers
