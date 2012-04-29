@@ -1,4 +1,4 @@
-Feature: Issuing the 'queue print' command will output a data tabe
+Feature: Issuing the 'queue print' command will output a data table
 
   As a user
   In order see the data that I have queue
