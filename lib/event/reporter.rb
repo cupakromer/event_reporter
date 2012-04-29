@@ -1,5 +1,9 @@
 require 'csv'
 
+class String
+  def titlecase ; split(/ /).map!{|w| w.capitalize}.join(' ') ; end
+end
+
 module Event
   module DataCleaner
     INVALID_PHONE_NUMBER_CHARS = INVALID_ZIPCODE_CHARS = /\D/
@@ -112,11 +116,7 @@ module Event
       record[:zipcode] = @cleaner.clean_zipcode record[:zipcode]
       record[:email].downcase! if record[:email]
 
-      [ :first_name, :last_name ].each do |sym|
-        if record[sym]
-          record[sym] = record[sym].split.map!{|w| w.capitalize}.join(" ")
-        end
-      end
+      [:first_name, :last_name].each{ |a| record[a] &&= record[a].titlecase }
 
       record
     end
