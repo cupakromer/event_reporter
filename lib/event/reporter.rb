@@ -31,29 +31,22 @@ module Event
     end
 
     def execute command
-      command, *args = command.chomp.split
-
-      case command
-      when 'load'
-        filename = args.empty? ? "event_attendees.csv" : args[0]
+      case command.chomp
+      when /^help(?: )?(.*)$/
+        help $1
+      when /^load(?: )?(.*)$/
+        filename = $1.empty? ? "event_attendees.csv" : $1
         load_attendees_from filename
-      when 'help'
-        help args
-      when 'queue'
-        command, *args = *args
-        case command
-        when 'count'
-          output.puts "#{queue_count} attendees in queue"
-        when 'clear'
-          queue_clear
-        when 'print'
-          print_attendees
-        else
-          output_help_messages
-        end
+      when /^queue count$/
+        output.puts "#{queue_count} attendees in queue"
+      when /^queue clear$/
+        queue_clear
+      when /^queue print$/
+        print_attendees
       else
         output_help_messages
       end
+
       output.puts "Command: "
     end
 
@@ -83,15 +76,17 @@ module Event
       output.puts "Use the command 'help' to see a list of all valid commands"
     end
 
-    def help args
-      command = args * " "
+    def output_all_command_names
+      KNOWN_COMMANDS.keys.each do |command|
+        output.puts command
+      end
+    end
 
+    def help command
       if command.empty?
-        KNOWN_COMMANDS.keys.each do |command|
-          output.puts command
-        end
+        output_all_command_names
       elsif KNOWN_COMMANDS.include? command
-        output.puts command_description args * " "
+        output.puts command_description command
       else
         output_help_messages
       end
