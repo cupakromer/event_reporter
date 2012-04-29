@@ -8,6 +8,7 @@ end
 module Event
   class Reporter
     attr_reader :output, :known_commands
+    attr_accessor :attendees
 
     KNOWN_COMMANDS = {
       "help" => "Output a listing of the available individual commands.",
@@ -49,8 +50,6 @@ module Event
 
       output.puts "Command: "
     end
-
-    attr_accessor :attendees
 
     def load_attendees_from filename
       file = CSV.open filename, headers: true, header_converters: :symbol
