@@ -2,47 +2,47 @@ require 'csv'
 
 module Event
   module DataCleaner
-    INVALID_PHONE_NUMBER_CHARACTERS = INVALID_ZIPCODE_CHARACTERS = /\D/
+    INVALID_PHONE_NUMBER_CHARS = INVALID_ZIPCODE_CHARS = /\D/
     VALID_PHONE_NUMBER_LENGTH = 10
     INVALID_PHONE_NUMBER = "0000000000"
     US_PHONE_CODE = "1"
-
-    def self.clean_phone_number original
-      original ||= ""
-      original = original.gsub INVALID_PHONE_NUMBER_CHARACTERS, ''
-
-      if original.length == VALID_PHONE_NUMBER_LENGTH
-        original
-      elsif number_has_us_code? original
-        original[1..-1]
-      else
-        INVALID_PHONE_NUMBER
-      end
-    end
-
-    def self.number_has_us_code? number
-      number.length == (VALID_PHONE_NUMBER_LENGTH + 1) &&
-      number.start_with?(US_PHONE_CODE)
-    end
 
     INVALID_ZIPCODE = "00000"
     VALID_ZIPCODE_LENGTH = 5
     ZIPCODE_PAD = "0"
 
-    def self.clean_zipcode original
-      original ||= INVALID_ZIPCODE
-      original = original.gsub INVALID_ZIPCODE_CHARACTERS, ''
+    def self.clean_phone_number original
+      numbers = scrub_invalid_chars original, INVALID_PHONE_NUMBER_CHARS, ""
 
-      if original.length < VALID_ZIPCODE_LENGTH
-        pad_zipcode original
+      if numbers.length == VALID_PHONE_NUMBER_LENGTH
+        numbers
+      elsif phone_has_us_code? numbers
+        numbers[1..-1]
       else
-        original
+        INVALID_PHONE_NUMBER
       end
+    end
+
+    def self.clean_zipcode dirty
+      zip = scrub_invalid_chars dirty, INVALID_ZIPCODE_CHARS, INVALID_ZIPCODE
+
+      zip.length < VALID_ZIPCODE_LENGTH ? pad_zipcode(zip) : zip
+    end
+
+    private
+    def self.scrub_invalid_chars dirty, matcher, default_val
+      dirty ? dirty.gsub(matcher, '') : default_val
+    end
+
+    def self.phone_has_us_code? number
+      number.length == (VALID_PHONE_NUMBER_LENGTH + 1) &&
+      number.start_with?(US_PHONE_CODE)
     end
 
     def self.pad_zipcode original
       ZIPCODE_PAD * (VALID_ZIPCODE_LENGTH - original.length) + original
     end
+
   end
 
   class Reporter
@@ -61,6 +61,7 @@ module Event
 
     def initialize output
       @output = output
+      @cleaner = DataCleaner
     end
 
     def run
@@ -107,8 +108,8 @@ module Event
     end
 
     def clean_data record
-      record[:homephone] = clean_phone_number record[:homephone]
-      record[:zipcode] = clean_zipcode record[:zipcode]
+      record[:homephone] = @cleaner.clean_phone_number record[:homephone]
+      record[:zipcode] = @cleaner.clean_zipcode record[:zipcode]
       record[:email].downcase! if record[:email]
 
       [ :first_name, :last_name ].each do |sym|
@@ -118,48 +119,6 @@ module Event
       end
 
       record
-    end
-
-    INVALID_PHONE_NUMBER_CHARACTERS = INVALID_ZIPCODE_CHARACTERS = /\D/
-    VALID_PHONE_NUMBER_LENGTH = 10
-    INVALID_PHONE_NUMBER = "0000000000"
-    US_PHONE_CODE = "1"
-
-    def clean_phone_number original
-      original ||= ""
-      original = original.gsub INVALID_PHONE_NUMBER_CHARACTERS, ''
-
-      if original.length == VALID_PHONE_NUMBER_LENGTH
-        original
-      elsif number_has_us_code? original
-        original[1..-1]
-      else
-        INVALID_PHONE_NUMBER
-      end
-    end
-
-    def number_has_us_code? number
-      number.length == (VALID_PHONE_NUMBER_LENGTH + 1) &&
-      number.start_with?(US_PHONE_CODE)
-    end
-
-    INVALID_ZIPCODE = "00000"
-    VALID_ZIPCODE_LENGTH = 5
-    ZIPCODE_PAD = "0"
-
-    def clean_zipcode original
-      original ||= INVALID_ZIPCODE
-      original = original.gsub INVALID_ZIPCODE_CHARACTERS, ''
-
-      if original.length < VALID_ZIPCODE_LENGTH
-        pad_zipcode original
-      else
-        original
-      end
-    end
-
-    def pad_zipcode original
-      ZIPCODE_PAD * (VALID_ZIPCODE_LENGTH - original.length) + original
     end
 
     def output_help_messages
