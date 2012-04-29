@@ -43,7 +43,9 @@ module Event
       when /^queue clear$/
         queue_clear
       when /^queue print$/
-        print_attendees
+        print_delimited attendees
+      when /^queue print by (.*)$/
+        print_delimited sort_attendees_by $1
       else
         output_help_messages
       end
@@ -100,12 +102,16 @@ module Event
       output.puts "Attendee queue is empty"
     end
 
+    def sort_attendees_by attribute
+      attendees.sort_by{ |attendee| attendee[attribute.to_sym] }
+    end
+
     DATA_TABLE_HEADER =
       "LAST NAME\tFIRST NAME\tEMAIL\tZIPCODE\tCITY\tSTATE\tADDRESS\tPHONE"
 
-    def print_attendees
+    def print_delimited data
       output.puts DATA_TABLE_HEADER
-      attendees.each do |a|
+      data.each do |a|
         output.puts "#{a[:last_name]}\t#{a[:first_name]}\t" \
                     "#{a[:email_address]}\t#{a[:zipcode]}\t#{a[:city]}\t" \
                     "#{a[:state]}\t#{a[:street]}\t#{a[:homephone]}"
