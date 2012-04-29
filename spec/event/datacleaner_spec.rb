@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 module Event
-  describe Reporter do
-    describe "#clean_phone_number" do
+  describe DataCleaner do
+    describe ".clean_phone_number" do
       {
         "1234567890"     => "1234567890",
         "(123) 456-7890" => "1234567890",
@@ -14,14 +14,12 @@ module Event
         "12345"          => "0000000000",
       }.each do |phone_number, cleaned_number|
         it "converts #{phone_number} to #{cleaned_number}" do
-          output = double('output')
-          reporter = Reporter.new output
-          reporter.clean_phone_number(phone_number).should == cleaned_number
+          DataCleaner.clean_phone_number(phone_number).should == cleaned_number
         end
       end
     end
 
-    describe "#clean_zipcode" do
+    describe ".clean_zipcode" do
       {
         "12345" => "12345",
         "1234"  => "01234",
@@ -33,9 +31,7 @@ module Event
         "01.12" => "00112",
       }.each do |zipcode, cleanded_zipcode|
         it "converts #{zipcode} to #{cleanded_zipcode}" do
-          output = double('output')
-          reporter = Reporter.new output
-          reporter.clean_zipcode(zipcode).should == cleanded_zipcode
+          DataCleaner.clean_zipcode(zipcode).should == cleanded_zipcode
         end
       end
     end

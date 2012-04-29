@@ -1,6 +1,50 @@
 require 'csv'
 
 module Event
+  module DataCleaner
+    INVALID_PHONE_NUMBER_CHARACTERS = INVALID_ZIPCODE_CHARACTERS = /\D/
+    VALID_PHONE_NUMBER_LENGTH = 10
+    INVALID_PHONE_NUMBER = "0000000000"
+    US_PHONE_CODE = "1"
+
+    def self.clean_phone_number original
+      original ||= ""
+      original = original.gsub INVALID_PHONE_NUMBER_CHARACTERS, ''
+
+      if original.length == VALID_PHONE_NUMBER_LENGTH
+        original
+      elsif number_has_us_code? original
+        original[1..-1]
+      else
+        INVALID_PHONE_NUMBER
+      end
+    end
+
+    def self.number_has_us_code? number
+      number.length == (VALID_PHONE_NUMBER_LENGTH + 1) &&
+      number.start_with?(US_PHONE_CODE)
+    end
+
+    INVALID_ZIPCODE = "00000"
+    VALID_ZIPCODE_LENGTH = 5
+    ZIPCODE_PAD = "0"
+
+    def self.clean_zipcode original
+      original ||= INVALID_ZIPCODE
+      original = original.gsub INVALID_ZIPCODE_CHARACTERS, ''
+
+      if original.length < VALID_ZIPCODE_LENGTH
+        pad_zipcode original
+      else
+        original
+      end
+    end
+
+    def self.pad_zipcode original
+      ZIPCODE_PAD * (VALID_ZIPCODE_LENGTH - original.length) + original
+    end
+  end
+
   class Reporter
     attr_reader :output, :known_commands
 
