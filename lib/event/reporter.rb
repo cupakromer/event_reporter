@@ -1,6 +1,6 @@
 require 'csv'
 
-module EventReporter
+module Event
   class Reporter
     attr_reader :output, :known_commands
 

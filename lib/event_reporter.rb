@@ -1,1 +1,1 @@
-require 'event_reporter/reporter'
+require 'event/reporter'

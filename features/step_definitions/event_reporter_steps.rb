@@ -23,27 +23,27 @@ Given /^I have not launched the program$/ do
 end
 
 Given /^I am at the command prompt$/ do
-  @app = EventReporter::Reporter.new(output)
+  @app = Event::Reporter.new(output)
   @app.run
   output.messages.last.should include "Command: "
 end
 
 Given /^the default attendees are loaded$/ do
-  @app = EventReporter::Reporter.new(output)
+  @app = Event::Reporter.new(output)
   @app.run
   @app.execute "load #{DEFAULT_DATA_FILE}"
   output.messages.last.should include "Command: "
 end
 
 Given /^the "([^"]*)" attendees are loaded$/ do |file|
-  @app = EventReporter::Reporter.new(output)
+  @app = Event::Reporter.new(output)
   @app.run
   @app.execute "load #{file}"
   output.messages.last.should include "Command: "
 end
 
 When /^I run the program$/ do
-  @app = EventReporter::Reporter.new(output).run
+  @app = Event::Reporter.new(output).run
 end
 
 ANY_COMMAND = "a_command"
@@ -74,7 +74,7 @@ Then /^I should see the command prompt/ do
 end
 
 Then /^I should see a list of all available commands$/ do
-  EventReporter::Reporter::KNOWN_COMMANDS.keys.each do |command|
+  Event::Reporter::KNOWN_COMMANDS.keys.each do |command|
     output.messages.should include command
   end
 end
@@ -85,7 +85,7 @@ Then /^issuing "([^"]*)" should return "([^"]*)"$/ do |command, expected_output|
 end
 
 Then /^I should see the data table:$/ do |expected_table|
-  output.messages.should include EventReporter::Reporter::DATA_TABLE_HEADER
+  output.messages.should include Event::Reporter::DATA_TABLE_HEADER
   expected_table.rows.each do |row|
     output.messages.should include row * "\t"
   end

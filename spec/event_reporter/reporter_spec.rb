@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module EventReporter
+module Event
   describe Reporter do
     describe "#clean_phone_number" do
       {
