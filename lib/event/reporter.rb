@@ -69,25 +69,8 @@ module Event
     end
 
     def filter_attendees_by! attribute, criteria
-      criteria_words = criteria.downcase.split
-      attendees.select!{ |attendee|
-        if criteria_words.size > 1
-          data = attendee[attribute.to_sym].downcase.split
-          have_first_word = data.index(criteria_words[0])
-          if have_first_word
-            data[have_first_word..criteria_words.size - 1] == criteria_words
-          else
-            false
-          end
-        else
-          looking_for = criteria.downcase
-          found = false
-          attendee[attribute.to_sym].downcase.split.each{ |w|
-            found = true and break if w == looking_for
-          }
-          found
-        end
-      }
+      matcher = %r(\b#{criteria.downcase}\b)
+      attendees.select!{ |a| a[attribute.to_sym].downcase =~ matcher }
     end
 
     def clean_data record
