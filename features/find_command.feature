@@ -23,9 +23,16 @@ Feature: Issuing the 'find' command will load the queue with all matching record
        | Hankins   | Sarah      | pinalevitsky@jumpstartlab.com     | 20009   | Washington       | DC    | 2022 15th Street NW    | 4145205000   |
        | Xx        | Sarah      | lqrm4462@jumpstartlab.com         | 33703   | Saint Petersburg | FL    | 4175 3rd Street North  | 9419792000  |
 
-  Scenario: Insensitive to internal whitespace - match
+  Scenario: Insensitive to internal whitespace - match part 1
     Given the "my_attendees.csv" attendees are loaded
     When I issue the command "find first_name mary"
+    And I issue the command "queue print"
+    Then I should see "1 attendees loaded"
+    And I should see "Mary Kate"
+
+  Scenario: Insensitive to internal whitespace - match part 2
+    Given the "my_attendees.csv" attendees are loaded
+    When I issue the command "find first_name mary Kate"
     And I issue the command "queue print"
     Then I should see "1 attendees loaded"
     And I should see "Mary Kate"
