@@ -47,6 +47,8 @@ module Event
         print_delimited attendees
       when /^queue print by (.+)$/
         print_delimited sort_queue_by $1
+      when /^queue save to (.+)$/
+        save_attendees_to $1
       when /^find (\w+) (.+)$/
         load_attendees_from @last_loaded_file
         filter_attendees_by! $1, $2
@@ -81,6 +83,13 @@ module Event
       [:first_name, :last_name].each{ |a| record[a] &&= record[a].titlecase }
 
       record
+    end
+
+    def save_attendees_to filename
+      CSV.open(filename, "w") do |file|
+        file << @attributes
+        attendees.each { |attendee| file << attendee }
+      end
     end
 
     def output_help_messages

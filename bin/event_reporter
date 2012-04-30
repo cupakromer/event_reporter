@@ -2,4 +2,8 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'event_reporter'
 
-EventReporter::Reporter.new('../event_attendees.csv', STDOUT).run
+r = Event::Reporter.new(STDOUT)
+r.run
+while true
+  r.execute STDIN.gets
+end
