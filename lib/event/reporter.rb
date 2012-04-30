@@ -45,7 +45,7 @@ module Event
       when /^queue print$/
         print_delimited attendees
       when /^queue print by (.*)$/
-        print_delimited sort_attendees_by $1
+        print_delimited sort_queue_by $1
       else
         output_help_messages
       end
@@ -102,7 +102,7 @@ module Event
       output.puts "Attendee queue is empty"
     end
 
-    def sort_attendees_by attribute
+    def sort_queue_by attribute
       attendees.sort_by{ |attendee| attendee[attribute.to_sym] }
     end
 

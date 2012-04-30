@@ -94,7 +94,19 @@ end
 Then /^I should see the ordered data table:$/ do |expected_table|
   output_text = output.messages
   output_text.should include Event::Reporter::DATA_TABLE_HEADER
-  start = output_text.rindex(Event::Reporter::DATA_TABLE_HEADER) + 1
-  output_text[start..(start + expected_table.rows.size - 1)].should == expected_table.rows.
-    map{ |row| row * "\t" }
+  expected = expected_table.rows
+  get_table(output_text, expected.size).should == delimited_table(expected)
+end
+
+def delimited_table rows
+  rows.map{ |row| row * "\t" }
+end
+
+def find_start_of_data_table lines
+  lines.rindex(Event::Reporter::DATA_TABLE_HEADER) + 1
+end
+
+def get_table lines, table_size
+  start = find_start_of_data_table lines
+  lines[start..(start + table_size - 1)]
 end
