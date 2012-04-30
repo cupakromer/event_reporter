@@ -28,14 +28,18 @@ Feature: Issuing the 'find' command will load the queue with all matching record
     When I issue the command "find first_name mary"
     And I issue the command "queue print"
     Then I should see "1 attendees loaded"
-    And I should see "Mary Kate"
+    And I should see the data table:
+       | LAST NAME | FIRST NAME | EMAIL                             | ZIPCODE | CITY             | STATE | ADDRESS                | PHONE          |
+       | Curry     | Mary Kate  | wmppydaymaker@jumpstartlab.com    | 21230   | Baltimore        | MD    | 1509 Jackson Street    | 2023281000 |
 
   Scenario: Insensitive to internal whitespace - match part 2
     Given the "my_attendees.csv" attendees are loaded
     When I issue the command "find first_name mary Kate"
     And I issue the command "queue print"
     Then I should see "1 attendees loaded"
-    And I should see "Mary Kate"
+    And I should see the data table:
+       | LAST NAME | FIRST NAME | EMAIL                             | ZIPCODE | CITY             | STATE | ADDRESS                | PHONE          |
+       | Curry     | Mary Kate  | wmppydaymaker@jumpstartlab.com    | 21230   | Baltimore        | MD    | 1509 Jackson Street    | 2023281000 |
 
   Scenario: Insensitive to internal whitespace - no match
     Given the "my_attendees.csv" attendees are loaded
@@ -47,5 +51,6 @@ Feature: Issuing the 'find' command will load the queue with all matching record
     When I issue the command "find city la"
     And I issue the command "queue print"
     Then I should see "1 attendees loaded"
-    And I should see "La Jolla"
-    And I should not see "Placerville"
+    And I should see the data table:
+       | LAST NAME | FIRST NAME | EMAIL                             | ZIPCODE | CITY             | STATE | ADDRESS                | PHONE          |
+       | Zielke    | Eli        | jbrabeth.buckley@jumpstartlab.com | 00037   | La Jolla         | CA    | 3024 Cranbrook Ct      | 8584053000   |

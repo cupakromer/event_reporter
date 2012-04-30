@@ -45,9 +45,9 @@ module Event
         queue_clear
       when /^queue print$/
         print_delimited attendees
-      when /^queue print by (.*)$/
+      when /^queue print by (.+)$/
         print_delimited sort_queue_by $1
-      when /^find (\w+) (.*)$/
+      when /^find (\w+) (.+)$/
         load_attendees_from @last_loaded_file
         filter_attendees_by! $1, $2
         output.puts "#{attendees.size} attendees loaded"
@@ -69,8 +69,24 @@ module Event
     end
 
     def filter_attendees_by! attribute, criteria
+      criteria_words = criteria.downcase.split
       attendees.select!{ |attendee|
-        attendee[attribute.to_sym].downcase == criteria.downcase
+        if criteria_words.size > 1
+          data = attendee[attribute.to_sym].downcase.split
+          have_first_word = data.index(criteria_words[0])
+          if have_first_word
+            data[have_first_word..criteria_words.size - 1] == criteria_words
+          else
+            false
+          end
+        else
+          looking_for = criteria.downcase
+          found = false
+          attendee[attribute.to_sym].downcase.split.each{ |w|
+            found = true and break if w == looking_for
+          }
+          found
+        end
       }
     end
 
