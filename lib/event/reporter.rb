@@ -38,6 +38,7 @@ module Event
       when /^load(?: )?(.*)$/
         filename = $1.empty? ? "event_attendees.csv" : $1
         load_attendees_from filename
+        output.puts "#{attendees.size} attendees loaded"
       when /^queue count$/
         output.puts "#{queue_count} attendees in queue"
       when /^queue clear$/
@@ -46,6 +47,10 @@ module Event
         print_delimited attendees
       when /^queue print by (.*)$/
         print_delimited sort_queue_by $1
+      when /^find (\w+) (.*)$/
+        load_attendees_from @last_loaded_file
+        filter_attendees_by! $1, $2
+        output.puts "#{attendees.size} attendees loaded"
       else
         output_help_messages
       end
@@ -55,12 +60,18 @@ module Event
 
     def load_attendees_from filename
       file = CSV.open filename, headers: true, header_converters: :symbol
+      @last_loaded_file = filename
       @attendees = []
       file.each do |attendee|
         @attendees << clean_data(attendee)
       end
       @attributes = file.headers
-      output.puts "#{@attendees.size} attendees loaded"
+    end
+
+    def filter_attendees_by! attribute, criteria
+      attendees.select!{ |attendee|
+        attendee[attribute.to_sym].downcase == criteria.downcase
+      }
     end
 
     def clean_data record
