@@ -105,11 +105,11 @@ module Event
 
     def sort_queue_by attribute
       attribute &&= attribute.to_sym
-      if !@attributes.include? attribute.to_sym
+      if !@attributes.include? attribute
         output.puts "Unknown attribute '#{attribute}'"
         return nil
       end
-      attendees.sort_by{ |attendee| attendee[attribute.to_sym] }
+      attendees.sort_by{ |attendee| attendee[attribute] }
     end
 
     DATA_TABLE_HEADER =
