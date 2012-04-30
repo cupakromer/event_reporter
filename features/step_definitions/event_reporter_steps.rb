@@ -65,8 +65,8 @@ When /^I issue the "([^"]*)" command for an invalid command$/ do |command|
   @app.execute "#{command} #{INVALID_COMMAND}"
 end
 
-Then /^I should see "([^"]*)"$/ do |message|
-  output.messages.should include message
+Then /^I (should|should not) see "([^"]*)"$/ do |should_or_not, message|
+  output.messages.send should_or_not.gsub(' ', '_'), include(message)
 end
 
 Then /^I should see the command prompt/ do
