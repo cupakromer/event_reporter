@@ -20,3 +20,8 @@ Feature: Issuing the 'queue print by' command will output a sorted data table
        | Xx        | Sarah      | lqrm4462@jumpstartlab.com         | 33703   | Saint Petersburg | FL    | 4175 3rd Street North  | 9419792000  |
        | Zielke    | Eli        | jbrabeth.buckley@jumpstartlab.com | 00037   | La Jolla         | CA    | 3024 Cranbrook Ct      | 8584053000   |
        | Zimmerman | Douglas    | vjeller.79@jumpstartlab.com       | 50309   | Des Moines       | IA    | 1818 Woodland Ave #101 | 4252745000   |
+
+  Scenario: Passing a bad attribute fails with message
+    Given the "my_attendees.csv" attendees are loaded
+    When I issue the command "queue print by no_such_attribute"
+    Then I should see "Unknown attribute 'no_such_attribute'"

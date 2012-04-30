@@ -59,6 +59,7 @@ module Event
       file.each do |attendee|
         @attendees << clean_data(attendee)
       end
+      @attributes = file.headers
       output.puts "#{@attendees.size} attendees loaded"
     end
 
@@ -103,6 +104,11 @@ module Event
     end
 
     def sort_queue_by attribute
+      attribute &&= attribute.to_sym
+      if !@attributes.include? attribute.to_sym
+        output.puts "Unknown attribute '#{attribute}'"
+        return nil
+      end
       attendees.sort_by{ |attendee| attendee[attribute.to_sym] }
     end
 
@@ -110,6 +116,7 @@ module Event
       "LAST NAME\tFIRST NAME\tEMAIL\tZIPCODE\tCITY\tSTATE\tADDRESS\tPHONE"
 
     def print_delimited data
+      return unless data
       output.puts DATA_TABLE_HEADER
       data.each do |a|
         output.puts "#{a[:last_name]}\t#{a[:first_name]}\t" \
